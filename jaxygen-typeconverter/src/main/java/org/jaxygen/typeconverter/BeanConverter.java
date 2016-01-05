@@ -17,7 +17,7 @@
 package org.jaxygen.typeconverter;
 
 import org.jaxygen.typeconverter.exceptions.ConversionError;
-import org.jaxygen.util.BeanUtil;
+import org.jaxygen.typeconverter.util.BeanUtil;
 
 /**
  * The generic implementation of the class responsible to convert one POJO into
