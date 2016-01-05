@@ -33,11 +33,12 @@ import org.jaxygen.typeconverter.exceptions.ConversionError;
 public class BeanUtil {
 
   /**
-   * Copy bean content from one bean to another. The bean is copied using the
+   * Copies bean content from one bean to another. The bean is copied using the
    * set and get methods. Method invokes all getXX methods on the from object,
    * and result pass to the corresponding setXX methods in the to object. Note
-   * that it is not obvious that both object are there same type, only set and
-   * get methods must much.
+   * that it is not obvious that both object are of the same type.
+   * If get and set methods do not match then it tries to use appropriate
+   * converter registered in default type converter factory.
    *
    * @param from data provider object.
    * @param to data acceptor object.
