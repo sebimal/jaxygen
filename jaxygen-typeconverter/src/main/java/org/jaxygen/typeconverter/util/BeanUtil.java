@@ -51,15 +51,17 @@ public class BeanUtil {
         if (PropertyUtils.isWriteable(to, pd.getName())) {
           try {
             PropertyDescriptor wd = PropertyUtils.getPropertyDescriptor(to, pd.getName());
-            Object copyVal = PropertyUtils.getProperty(from, pd.getName());
-            if (wd.getPropertyType().isAssignableFrom(pd.getPropertyType())) {
-              PropertyUtils.setProperty(to, wd.getName(), copyVal);
-            } else {
-              try {
-                Object convertedCopyVal = TypeConverterFactory.instance().convert(copyVal, wd.getPropertyType());
-                PropertyUtils.setProperty(to, wd.getName(), convertedCopyVal);
-              } catch (ConversionError ex) {
-                Logger.getAnonymousLogger().log(Level.WARNING, "Method {0}.{1} of type {2} is not compatible to {3}.{4} of type{5}", new Object[]{from.getClass().getName(), pd.getName(), pd.getPropertyType(), to.getClass().getName(), wd.getName(), wd.getPropertyType()});
+            if (!wd.getWriteMethod().isAnnotationPresent(BeanTransient.class)) {
+              Object copyVal = PropertyUtils.getProperty(from, pd.getName());
+              if (wd.getPropertyType().isAssignableFrom(pd.getPropertyType())) {
+                PropertyUtils.setProperty(to, wd.getName(), copyVal);
+              } else {
+                try {
+                  Object convertedCopyVal = TypeConverterFactory.instance().convert(copyVal, wd.getPropertyType());
+                  PropertyUtils.setProperty(to, wd.getName(), convertedCopyVal);
+                } catch (ConversionError ex) {
+                  Logger.getAnonymousLogger().log(Level.WARNING, "Method {0}.{1} of type {2} is not compatible to {3}.{4} of type{5}", new Object[]{from.getClass().getName(), pd.getName(), pd.getPropertyType(), to.getClass().getName(), wd.getName(), wd.getPropertyType()});
+                }
               }
             }
           } catch (IllegalAccessException ex) {
